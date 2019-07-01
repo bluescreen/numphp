@@ -11,7 +11,7 @@ trait ArithmeticTrait
 {
   /**
    * Return the reciprocal of the argument, element-wise.
-   * 
+   *
    * @param \SciPhp\NdArray|array|float|int $m
    * @return \SciPhp\NdArray
    * @link http://sciphp.org/numphp.reciprocal
@@ -33,7 +33,7 @@ trait ArithmeticTrait
 
   /**
    * Subtract a matrix from matrix
-   * 
+   *
    * @param \SciPhp\NdArray|array|float|int $m
    * @param \SciPhp\NdArray|array|float|int $n
    * @return \SciPhp\NdArray
@@ -62,7 +62,7 @@ trait ArithmeticTrait
 
   /**
    * Add two array_like
-   * 
+   *
    * @param  \SciPhp\NdArray|array|int|float $m
    * @param  \SciPhp\NdArray|array|int|float $n
    * @return \SciPhp\NdArray|int|float
@@ -91,7 +91,7 @@ trait ArithmeticTrait
 
   /**
    * Divide two arrays, element-wise
-   * 
+   *
    * @param  \SciPhp\NdArray|array|float|int $m A 2-dim array.
    * @param  \SciPhp\NdArray|array|float|int $n A 2-dim array.
    * @return \SciPhp\NdArray|float|int
@@ -115,7 +115,7 @@ trait ArithmeticTrait
     if (is_numeric($n) && $m instanceof NdArray) {
       return $m->copy()->divide($n);
     }
-    
+
     // lamba / array
     if (is_numeric($m) && $n instanceof NdArray) {
       return static::full_like($n, $m)->divide($n);
@@ -128,7 +128,7 @@ trait ArithmeticTrait
     $shape_m = $m->shape;
     $shape_n = $n->shape;
 
-    // n & m are vectors: 
+    // n & m are vectors:
     if (count($shape_m) == 1 && $m->ndim == $n->ndim) {
       Assert::eq($shape_m, $shape_n, 'Matrices are not aligned.');
     }
@@ -143,6 +143,18 @@ trait ArithmeticTrait
       Assert::eq($shape_m[0], $shape_n[1], 'Matrices are not aligned.');
 
       $m = $m->resize($shape_n);
+    }
+    
+    elseif ($m->ndim === $n->ndim && $shape_n[1] == 1) {
+
+        list($cols, $rows) = $m->shape;
+        $result = self::zeros($cols, $rows);
+        for ($i = 0; $i < $cols; $i++) {
+            for ($j = 0; $j < $rows; $j++) {
+                $result["$i,$j"] = $m["$i,$j"] / $n["$i,0"];
+            }
+        }
+        return $result;
     }
 
     // array / array
@@ -165,7 +177,7 @@ trait ArithmeticTrait
 
   /**
    * Multiply two arrays, element-wise
-   * 
+   *
    * @param  \SciPhp\NdArray|array|float|int $m A 2-dim array.
    * @param  \SciPhp\NdArray|array|float|int $n A 2-dim array.
    * @return \SciPhp\NdArray|float|int
@@ -199,7 +211,7 @@ trait ArithmeticTrait
     $shape_m = $m->shape;
     $shape_n = $n->shape;
 
-    // n & m are vectors: 
+    // n & m are vectors:
     if (count($shape_m) == 1 && $m->ndim == $n->ndim) {
       Assert::eq($shape_m, $shape_n, 'Matrices are not aligned.');
     }
@@ -235,7 +247,7 @@ trait ArithmeticTrait
 
   /**
    * Dot product of two arrays
-   * 
+   *
    * @param  \SciPhp\NdArray|array|float|int $m A 2-dim array.
    * @param  \SciPhp\NdArray|array|float|int $n A 2-dim array.
    * @return \SciPhp\NdArray|float|int
@@ -256,7 +268,7 @@ trait ArithmeticTrait
     if (is_numeric($n) && $m instanceof NdArray) {
       return $m->copy()->dot($n);
     }
-    
+
     // lamba.array
     if (is_numeric($m) && $n instanceof NdArray) {
       return $n->copy()->dot($m);
@@ -269,7 +281,7 @@ trait ArithmeticTrait
     $shape_m = $m->shape;
     $shape_n = $n->shape;
 
-    // n & m are vectors: 
+    // n & m are vectors:
     if (count($shape_m) == 1 && $m->ndim == $n->ndim) {
       Assert::eq($shape_m, $shape_n, 'Matrices are not aligned.');
 
@@ -325,7 +337,7 @@ trait ArithmeticTrait
 
   /**
    * Browse p rows
-   * 
+   *
    * @param  \SciPhp\NdArray $m
    * @param  \SciPhp\NdArray $n
    * @return \Closure
@@ -339,7 +351,7 @@ trait ArithmeticTrait
 
   /**
    * Browse p cols and sum products
-   * 
+   *
    * @param  \SciPhp\NdArray $m
    * @param  \SciPhp\NdArray $n
    * @return \Closure
