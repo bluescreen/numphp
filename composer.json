@@ -1,5 +1,5 @@
 {
-    "name": "sciphp/numphp",
+    "name": "bluescreen/numphp",
     "type": "library",
     "version": "0.2.0",
     "description": "PHP scientific computing",
