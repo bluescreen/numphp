@@ -15,10 +15,16 @@ class RandomGenerator
 {
     public function randn($a = 1, $b = 1){
         $X = np::zeros($a, $b);
+        for($i=0;$i< $a; $i++){
+            for($j=0;$j< $b; $j++) {
+                $X["$i,$j"] = $this->nrand(0, 1);
+            }
+        }
+        /*
         $X->walk(function (&$data) {
             $data[0] = $this->nrand(0, 1);
             $data[1] = $this->nrand(0, 1);
-        });
+        });*/
         return np::ar($X->data);
     }
 
@@ -53,11 +59,12 @@ class RandomGenerator
 
     public function random($a = null, $b = null)
     {
-        if($a && !$b){
-            return $this->randn($a, 1);
-        }
-        if($a && $b){
+
+        if(!is_null($a) && !is_null($b)){
             return $this->randn($a, $b);
+        }
+        if($a && is_null($b)){
+            return $this->randn($a, 1);
         }
         return $this->nrand(0,1);
     }
