@@ -16,8 +16,8 @@ class RandomGenerator
     public function randn($a = 1, $b = 1){
         $X = np::zeros($a, $b);
         $X->walk(function (&$data) {
-            $data[0] = nrand(0, 1);
-            $data[1] = nrand(0, 1);
+            $data[0] = $this->nrand(0, 1);
+            $data[1] = $this->nrand(0, 1);
         });
         return np::ar($X->data);
     }
@@ -59,8 +59,17 @@ class RandomGenerator
         if($a && $b){
             return $this->randn($a, $b);
         }
-        return nrand(0,1);
+        return $this->nrand(0,1);
     }
 
+    private function urand(){
+        return mt_rand() / mt_getrandmax();
+    }
 
+    private function nrand($mean, $sd)
+    {
+        $x = mt_rand() / mt_getrandmax();
+        $y = mt_rand() / mt_getrandmax();
+        return sqrt(-2 * log($x)) * cos(2 * pi() * $y) * $sd + $mean;
+    }
 }
