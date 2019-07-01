@@ -22,4 +22,5 @@ abstract class Decorator implements ArrayAccess, IndexInterface
   use TriangleTrait;
   use VanderTrait;
   use VisitorTrait;
+  use ConcatTrait;
 }

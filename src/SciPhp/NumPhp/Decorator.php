@@ -20,4 +20,5 @@ abstract class Decorator
     use RangeTrait;
     use TriangleTrait;
     use VanderTrait;
+    use RandomTrait;
 }
